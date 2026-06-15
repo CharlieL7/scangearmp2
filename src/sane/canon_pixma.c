@@ -494,8 +494,6 @@ CMT_Status canon_sane_read(canon_sane_t * handled){
 	CMT_Status status = CMT_STATUS_GOOD;
 	unsigned char* buf  = NULL;
 	int readBytes = JPEGSCANBUFSIZE;
-	int len = 0;
-	int total =0;
 	buf = (unsigned char *)calloc(JPEGSCANBUFSIZE,1);
 
 	if(!buf){
@@ -509,11 +507,9 @@ CMT_Status canon_sane_read(canon_sane_t * handled){
 
 	while(status == CMT_STATUS_GOOD && !handled->cancel){
 		/*Read data from the scanner, the data are send in jpeg format*/
-		len = 0;
 		readBytes = JPEGSCANBUFSIZE;
 		status = CIJSC_read(buf,&readBytes);
-		len = fwrite(buf,1,readBytes,handled->file);
-		total += len;
+		fwrite(buf,1,readBytes,handled->file);
 	}
 	if(handled->cancel){
 		status = CMT_STATUS_CANCELLED;
